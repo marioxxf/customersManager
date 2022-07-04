@@ -61,8 +61,6 @@
 	$(document).ready(function(){
         $("#txtCelular").mask("(00) 00000-0000")
     });
-
-	
 </script>
 
 <!--- JQuery's Masks --->

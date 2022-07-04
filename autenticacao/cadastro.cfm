@@ -3,17 +3,18 @@
 <cfmodule template="../topmenu.cfm">
 
 <cfif isDefined('form.hdnSalvar') and '#form.hdnSalvar#' eq 1>
-    
   <cfset senhaInserida = hash("#form.txtSenha#", "SHA-256", "UTF-8")>
     <cfquery datasource="dataGioia">
         insert into users(
             usuario,
             senha,
-            dataCriacao
+            dataCriacao,
+            statusLogin
             ) values(
             '#form.txtUsuario#',
             '#senhaInserida#',
-            getdate()
+            getdate(),
+            1
         );
     </cfquery>
 

@@ -9,8 +9,11 @@
 
     <cfif buscaUsuario.recordCount neq 0>
         <cfif buscaUsuario.senha eq hash("#form.txtSenha#", "SHA-256", "UTF-8")>
-            <cflogin> 
-                <cfloginuser name="#form.txtUsuario#" password="#form.txtSenha#" roles = "admin"> 
+            <cfquery name="validaLogin" datasource="dataGioia">
+                update users set statusLogin = 1 where usuario = '#form.txtUsuario#'
+            </cfquery>
+            <cflogin>
+                <cfloginuser name="#form.txtUsuario#" password="#form.txtSenha#" roles ="admin"> 
             </cflogin>
             <script>
                 swal({

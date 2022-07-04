@@ -180,6 +180,17 @@
 </style>
 
 <cfset usuarioLogado = getAuthUser()>
+
+<cfif usuarioLogado neq "">
+  <cfquery name="validaLogin" datasource="dataGioia">
+    update users set statusLogin = 1 where usuario = '#usuarioLogado#'
+  </cfquery>
+</cfif>
+
+<cfquery name="contaLogados" datasource="dataGioia">
+  select COUNT(*) as 'qtd' from users where statusLogin = 1
+</cfquery>
+
 <nav class="navbar navbar-expand-lg bg-light" style="margin-top: 15px;">
     <div class="container-fluid">
       <a class="navbar-brand hovs" href="http://127.0.0.1:8500/testes/clientes/clientes.cfm">&nbspInício&nbsp</a>
@@ -223,18 +234,21 @@
             <li class="nav-item">
               <a style="color: white;" class="nav-link active" aria-current="page">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</a>
             </li>
-            <li class="nav-item">
-              <a style="color: white;" class="nav-link active" aria-current="page">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</a>
-            </li>
-            <li class="nav-item">
-              <a style="color: white;" class="nav-link active" aria-current="page">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</a>
-            </li>
             <!--- Gambiarra --->
             <li class="nav-item hovs">
               <a class="nav-link active" href="http://127.0.0.1:8500/testes/autenticacao/usuario.cfm" aria-current="page">Minha Conta</a>
             </li>
             <li class="nav-item hovs">
                 <a class="nav-link active" aria-current="page" onclick="desconectar()">Desconectar</a>
+            </li>
+            <li class="nav-item">
+              <a style="color: white;" class="nav-link active" aria-current="page">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</a>
+            </li>
+            <li class="nav-item">
+              <a style="color: white;" class="nav-link active" aria-current="page">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</a>
+            </li>
+            <li class="nav-item">
+              Usuário(s) conectado(s): <cfoutput>#contaLogados.qtd#</cfoutput>
             </li>
           <cfelse>
             <!--- Gambiarra --->
@@ -278,6 +292,15 @@
                     <a class="aspecial" href="/testes/autenticacao/login.cfm">Fazer login<i class="uil uil-arrow-right"></i></a>
                 </div>
               </div>
+              <li class="nav-item">
+                <a style="color: white;" class="nav-link active" aria-current="page">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</a>
+              </li>
+              <li class="nav-item">
+                <a style="color: white;" class="nav-link active" aria-current="page">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</a>
+              </li>
+              <li class="nav-item">
+                Usuário(s) conectados(s): <cfoutput>#contaLogados.qtd#</cfoutput>
+              </li>
             </li>
           </cfif>
         </ul>
@@ -300,6 +323,7 @@
                   $.ajax({
                     url: 'http://127.0.0.1:8500/testes/autenticacao/ajaxDesconectaUser.cfm',
                     async: false,
+                    data : {"usuario": '<cfoutput>#usuarioLogado#</cfoutput>'},
                     cache: false,
                     contentType: "application/json; charset=utf-8",
                     success: function(retorno){

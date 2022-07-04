@@ -22,7 +22,6 @@
             <br>
             <br>
             <cfset cont = 1>
-            <cfdump var="#retornoExcel#">
             <cfloop query="retornoExcel">	
                 <cfset dataInserida = #dataNascimento#>
                 <cfset dataTransformada = #lsParseDateTime(#dataInserida#)#>
