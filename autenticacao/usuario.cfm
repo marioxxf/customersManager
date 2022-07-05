@@ -9,7 +9,8 @@
 </cfquery>
 
 <cfquery name="buscaAtividades" datasource="dataGioia">
-    select * from logCadastros where idUsuarioCriador = '#buscaUsuarioLogado.id#'
+    select *, DATEPART(minute,dataCadastro) 'minuto' 
+    from logCadastros where idUsuarioCriador = 1
 </cfquery>
 
 <cfif usuarioLogado neq "">
@@ -50,7 +51,10 @@
                         </cfif>
                     </td>
                     <td><cfoutput>#buscaNomeClienteRegistrado.nome#</cfoutput></td>
-                    <td><cfoutput>#lsDateFormat(buscaAtividades.dataCadastro, "dd/mm/yyyy HH")#</cfoutput>h (aprox.)</td>
+                    <cfquery name="buscaMinutagemCorreta" datasource="dataGioia">
+                        select dataCadastro 'Today', DATEPART(minute,dataCadastro) 'minuto' from logCadastros
+                    </cfquery>
+                    <td><cfoutput>#lsDateFormat(buscaAtividades.dataCadastro, "dd/mm/yyyy HH:#buscaAtividades.minuto#:ss")#</cfoutput></td>
                     <td onclick="buscarCliente(<cfoutput>#buscaAtividades.idClienteCriado#</cfoutput>);"><center><input type="button" class="btn-info" value="Acesso" style="color: rgba(0,0,0,.5); background-color: white; border-color: white;"/></center></td>
                 </tr>
             </cfloop>

@@ -236,7 +236,7 @@
             </li>
             <!--- Gambiarra --->
             <li class="nav-item hovs">
-              <a class="nav-link active" href="http://127.0.0.1:8500/testes/autenticacao/usuario.cfm" aria-current="page">Minha Conta</a>
+              <a class="nav-link active" href="http://127.0.0.1:8500/testes/autenticacao/usuario.cfm" aria-current="page"><center>Minha Conta</center></a>
             </li>
             <li class="nav-item hovs">
                 <a class="nav-link active" aria-current="page" onclick="desconectar()">Desconectar</a>
