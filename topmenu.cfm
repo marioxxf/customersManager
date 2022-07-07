@@ -185,7 +185,31 @@
   <cfquery name="validaLogin" datasource="dataGioia">
     update users set statusLogin = 1 where usuario = '#usuarioLogado#'
   </cfquery>
+
+  <cfquery name="atualizaAcesso" datasource="dataGioia">
+    update users set ultimoAcesso = getdate() where usuario = '#usuarioLogado#'
+  </cfquery>
 </cfif>
+
+<!--- Anti-AFK (Início) --->
+<cfquery name="buscaLogados" datasource="dataGioia">
+  select * from users where statusLogin = 1
+</cfquery>
+<cfif buscaLogados.recordCount gt 0>
+  <cfquery name="checaAtividade" datasource="dataGioia">
+    select getdate() as 'dataAgora', usuario as 'usuario', dateadd(minute, 2, ultimoAcesso) as 'dataLimite', ultimoAcesso as'ultimoAcesso' from users where statusLogin = 1
+    <!---select usuario, getdate() as 'dataAgora', DATEPART(hour,getdate()) 'horaAgora', DATEPART(minute,getdate()) 'minutoAgora', ultimoAcesso 'ultimoAcesso', DATEPART(hour,ultimoAcesso) 'horaDoLogin', DATEPART(minute,ultimoAcesso) 'minutoDoLogin' from users where statusLogin = 1--->
+  </cfquery>
+
+  <cfloop query="checaAtividade">
+    <cfif checaAtividade.dataAgora gt checaAtividade.dataLimite or checaAtividade.dataAgora eq checaAtividade.dataLimite>
+      <cfquery name="deslogaAusentes" datasource="dataGioia">
+        update users set statusLogin = 0 where usuario = '#checaAtividade.usuario#'
+      </cfquery>
+    </cfif>
+  </cfloop>
+</cfif>
+<!--- Anti-AFK (Fim) --->
 
 <cfquery name="contaLogados" datasource="dataGioia">
   select COUNT(*) as 'qtd' from users where statusLogin = 1
@@ -239,7 +263,7 @@
               <a class="nav-link active" href="http://127.0.0.1:8500/testes/autenticacao/usuario.cfm" aria-current="page"><center>Minha Conta</center></a>
             </li>
             <li class="nav-item hovs">
-                <a class="nav-link active" aria-current="page" onclick="desconectar()">Desconectar</a>
+                <a class="nav-link active" aria-current="page" href="#" onclick="desconectar()">Desconectar</a>
             </li>
             <li class="nav-item">
               <a style="color: white;" class="nav-link active" aria-current="page">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</a>

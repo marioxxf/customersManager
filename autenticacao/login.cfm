@@ -15,6 +15,9 @@
             <cflogin>
                 <cfloginuser name="#form.txtUsuario#" password="#form.txtSenha#" roles ="admin"> 
             </cflogin>
+            <cfquery name="atualizaAcesso" datasource="dataGioia">
+                update users set ultimoAcesso = getdate() where usuario = '#form.txtUsuario#'
+            </cfquery>
             <script>
                 swal({
               title: "Login realizado com êxito!",
